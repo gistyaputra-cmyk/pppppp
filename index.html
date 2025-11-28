@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Verifikasi Data Asrama - Cute Mode</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap');
+
+/* Background dreamy kawaii cloud */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://i.ibb.co/6Rw1y34/magical-pink-clouds.jpg')
+        no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+}
+
+/* Overlay pink lembut */
+body::before {
+    content: "";
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(255, 214, 233, 0.45);
+    z-index:0;
+}
+
+/* Card utama kawaii */
+.box {
+    position: relative;
+    z-index:1;
+    background: rgba(255, 255, 255, 0.88);
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0 8px 30px rgba(255, 120, 160, 0.35);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    border: 3px solid #ffe0f2;
+}
+
+/* Judul cute */
+.title-cute {
+    font-family: 'Comic Neue', cursive;
+    font-size: 34px;
+    font-weight: 700;
+    color: #ff77b7;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px white;
+}
+
+/* Judul asli */
+h2 {
+    margin-bottom: 20px;
+    font-family: 'Comic Neue';
+    font-size: 26px;
+    font-weight: 700;
+    color: #ff99c9;
+}
+
+/* Label lucu */
+label {
+    font-family: 'Comic Neue', cursive;
+    color: #b35d87;
+    font-size: 15px;
+}
+
+/* Input kawaii */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 20px;
+    border: 2px solid #ffc3dd;
+    font-size: 15px;
+    background: #fff6fb;
+    transition: 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #ff82c4;
+    box-shadow: 0 0 10px rgba(255, 150, 190, 0.5);
+}
+
+/* Tombol marshmallow */
+button {
+    background: #ffb6d5;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 20px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff94c6;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 13px rgba(255, 130, 170, 0.5);
+}
+
+/* Hasil */
+.result {
+    padding: 15px;
+    border-radius: 18px;
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.success {
+    background: #e8ffe8;
+    color: #266b26;
+    border-left: 5px solid #89e089;
+}
+
+.error {
+    background: #ffe2e7;
+    color: #b04949;
+    border-left: 5px solid #ff7a8a;
+}
+
+input::placeholder {
+    color: #c791b0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Backsound kawaii -->
+<audio autoplay loop volume="0.2">
+    <source src="https://files.catbox.moe/4e6c0t.mp3" type="audio/mp3">
+</audio>
+
+<div class="box">
+
+    <!-- Judul lucu -->
+    <div class="title-cute">✨🐰 Yukk Check Absensi Dulu! 🩷🌸</div>
+
+    <h2>Verifikasi Data Asrama 🌟</h2>
+
+    <label>Masukkan Nama + House (contoh: budi santoso/lion) 📝💗:</label>
+    <input type="text" id="inputNama" placeholder="ketik nama/house 🐣">
+
+    <label>Pilih Jenis Asrama 🏠✨:</label>
+    <select id="jenisAsrama">
+        <option value="">Pilih jenis asrama... 💖</option>
+        <option value="putra">Putra 🧑</option>
+        <option value="putri">Putri 👧</option>
+    </select>
+
+    <label>Pilih Gedung Asrama 🏢🌈:</label>
+    <select id="gedungAsrama">
+        <option value="">Pilih gedung... 🏰</option>
+        <option value="soekarno">Soekarno</option>
+        <option value="hatta">Hatta</option>
+        <option value="ahmad yani">Ahmad Yani</option>
+        <option value="d.sekartaji">D. Sekartaji</option>
+        <option value="d.ambarsari">D. Ambarsari</option>
+        <option value="cut meutia">Cut Meutia</option>
+        <option value="d.kilisuci">D. Kilisuci</option>
+    </select>
+
+    <button onclick="cek()">💞 VERIFIKASI 💞</button>
+
+    <div id="hasil"></div>
+</div>
+
+<script>
+const houseValid = [
+    "mantaray", "dolphin", "shark", "rhino",
+    "lion", "komodo", "eagle", "dove", "hornbill"
+];
+
+function cek() {
+    let input = document.getElementById("inputNama").value.trim();
+    let jenis = document.getElementById("jenisAsrama").value;
+    let gedung = document.getElementById("gedungAsrama").value;
+    let hasil = document.getElementById("hasil");
+
+    if (!input || !jenis || !gedung) {
+        hasil.innerHTML = `<div class="result error">❗ Semua form wajib diisi yaa 😿💔</div>`;
+        return;
+    }
+
+    if (!input.includes("/")) {
+        hasil.innerHTML = `<div class="result error">✖ Format salah nih 🥺 gunakan nama/house yaa!</div>`;
+        return;
+    }
+
+    let pisah = input.split("/");
+    let nama = pisah[0].trim();
+    let house = pisah[1].trim().toLowerCase();
+
+    if (!nama || !house) {
+        hasil.innerHTML = `<div class="result error">✖ Format belum lengkap 😿<br>Contoh: budi santoso/lion</div>`;
+        return;
+    }
+
+    if (!houseValid.includes(house)) {
+        hasil.innerHTML = `
+            <div class="result error">
+                ✖ House <b>${house}</b> nggak ketemu 😿💦<br>
+                Coba cek lagi ya!
+            </div>
+        `;
+        return;
+    }
+
+    hasil.innerHTML = `
+        <div class="result success">
+            ✔✨ <b>Terverifikasi!</b> 🎀<br><br>
+            Nama: ${nama} 🧸<br>
+            House: ${house} 🌟<br>
+            Jenis Asrama: ${jenis} 🏠<br>
+            Gedung Asrama: ${gedung} 🏰💗
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
